@@ -1,6 +1,6 @@
 ## This plugin allows for toggling of content through one link
 
-[Demo](http://jsfiddle.net/4eRx8/)
+[Demo](http://jsfiddle.net/yzusy/)
 
 ### Dependencies:
 * [jQuery](http://jquery.com)
