@@ -1,19 +1,21 @@
-// remember to change every instance of "pluginName" to the name of your plugin!
 (function($) {
 
-    // here we go!
     $.showHide = function(element, options) {
 
+        var $element = $(element),
+            element = element;
+        
         // plugin's default options
         // this is private property and is  accessible only from inside the plugin
         var defaults = {
 
-            content: '', // this should default to something super easy.. $1_content, for example -- pj
+            content: $( '#' + $element.attr('id') + '_content'), // this should default to something super easy.. $1_content, for example -- pj
+            text_visible: $element.html(),
+            text_hidden: $element.html(),
+            animate: false,
 
-            // if your plugin is event-driven, you may provide callback capabilities for its events.
-            // execute these functions before or after events of your plugin, so that users may customize
-            // those particular events without changing the plugin's code
-            onFoo: function() {} // like, onHide... -- pj
+            onHide: function() {},
+            onShow: function() {}
 
         }
 
@@ -27,46 +29,43 @@
         // element the plugin is attached to;
         plugin.settings = {}
 
-        var $element = $(element),  // reference to the jQuery version of DOM element the plugin is attached to
-             element = element;        // reference to the actual DOM element
-
-        // the "constructor" method that gets called when the object is created
         plugin.init = function() {
             // the plugin's final properties are the merged default and user-provided options (if any)
             plugin.settings = $.extend({}, defaults, options);
             
-            // check element visibility
-            if( checkVisibility( plugin.settings.content ) ){ // visible
-                console.log( 'visible' );
-            } // if
-            else { // hidden
-                console.log( 'hidden' );
-            } // else
-            
+            // click the element, toggle the content
+            $element.click(function(){
+                var content = $(plugin.settings.content);
+                
+                // check the visibility of the content, and the toggle
+                checkVisibility(content) ? hideContent(content) : showContent(content);
+            });
 
         }
 
-        // public methods
-        // these methods can be called like:
-        // plugin.methodName(arg1, arg2, ... argn) from inside the plugin or
-        // element.data('pluginName').publicMethod(arg1, arg2, ... argn) from outside the plugin, where "element"
-        // is the element the plugin is attached to;
-
-        // a public method. for demonstration purposes only - remove it!
-        //plugin.foo_public_method = function() {
-
-            // code goes here
-
-        //}
-
-        // private methods
-        // these methods can be called only from inside the plugin like:
-        // methodName(arg1, arg2, ... argn)
-
         var checkVisibility = function(element){
-            return $(element).is(":visible");
+            return element.is(":visible");
+        } // checkVisibility
         
-        } // check_visibility
+        var hideContent = function(content){
+            if( plugin.settings.animate )
+                content.slideUp();
+            else
+                content.hide();
+            $element.html(plugin.settings.text_hidden);
+            if(typeof plugin.settings.onHide === "function" )
+                plugin.settings.onHide();
+        } // hideContent
+        
+        var showContent = function(content){
+            if( plugin.settings.animate )
+                content.slideDown();
+            else
+                content.show();
+            $element.html(plugin.settings.text_visible);
+            if(typeof plugin.settings.onShow === "function" )
+                plugin.settings.onShow();
+        } // showContent
 
 
         // fire up the plugin!
