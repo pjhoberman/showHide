@@ -18,3 +18,7 @@
     onHide: Function that runs after hide. Defaults to nothing.
     onShow: Function that runs after show. Defaults to nothing.
     
+### Todo:
+
+    allow class default, not just id default, for content options
+    
